@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
 
-    public class CustomLinkedList <T> where  T : IComparable<T>
+    public class CustomLinkedList <T> : IEnumerable
+         where  T : IComparable<T>
     {
         public class Node <T> // A peace of a CustomLinkedList
         {
@@ -184,6 +186,16 @@ namespace DataStructures
             Tail = null;
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return new CustomLinkedListEnumerator(this);
+        }
+        
+        public IEnumerator GetEnumerator(bool isStack)
+        {
+            return new CustomLinkedListEnumerator(this, true);
+        }
+        
         private bool CheckHeadOfLinkedList(T element) // Checks if the first node exists
         {
             if (Count != 0) return false; // If Count > 0 it continue
@@ -191,6 +203,38 @@ namespace DataStructures
             Tail = Head;
             Count++;
             return true;
+        }
+
+        private class CustomLinkedListEnumerator : IEnumerator
+        {
+            private CustomLinkedList<T> _customLinkedList;
+            private Node<T> _currentNode;
+            private bool _isStack;
+            public CustomLinkedListEnumerator(CustomLinkedList<T> customLinkedList, bool isStack = false)
+            {
+                _customLinkedList = customLinkedList;
+                _currentNode = null;
+                _isStack = isStack;
+            }
+
+            public bool MoveNext()
+            {
+                if (_isStack)
+                {
+                    _currentNode = _currentNode == null ? _customLinkedList.Tail : _currentNode.Previous;
+                    return _currentNode != null;
+                }
+                
+                _currentNode = _currentNode == null ? _customLinkedList.Head : _currentNode.Next;
+                return _currentNode != null;
+            }
+
+            public void Reset()
+            {
+                _currentNode = null;
+            }
+
+            public object Current => _currentNode.Value == null? null : _currentNode.Value;
         }
     }
 }

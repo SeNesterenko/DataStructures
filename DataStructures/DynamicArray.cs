@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
-public class DynamicArray <T> where T : IComparable<T>
+public class DynamicArray <T> : IEnumerable
+    where T : IComparable<T>
     {
         public int Count { get; private set; } // Count of elements in the array
 
@@ -134,12 +136,48 @@ public class DynamicArray <T> where T : IComparable<T>
         {
             (_elements[firstIndex], _elements[secondIndex]) = (_elements[secondIndex], _elements[firstIndex]);
         }
+        
+        public IEnumerator GetEnumerator()
+        {
+            return new DynamicArrayEnumerator(this);
+        }
 
         private void CheckCapacity() //Checks a size of the array
         {
             if (Count != _capacity) return; // If a count of the array is less than _capacity it returns
+            ResizeOfTheArray();
+        }
+
+        private void ResizeOfTheArray()
+        {
             Array.Resize(ref _elements, _capacity * 2); // Otherwise double the size of the array
             _capacity *= 2;
+        }
+
+        private class DynamicArrayEnumerator : IEnumerator
+        
+        {
+            private readonly DynamicArray<T> _dynamicArray;
+            private int _index;
+
+            public DynamicArrayEnumerator(DynamicArray<T> dynamicArray)
+            {
+                _dynamicArray = dynamicArray;
+                _index = -1;
+            }
+
+            public bool MoveNext()
+            {
+                _index++;
+                return _dynamicArray.Count > _index;
+            }
+
+            public void Reset()
+            {
+                _index = -1;
+            }
+
+            public object Current => _dynamicArray.Get(_index);
         }
     }
 }

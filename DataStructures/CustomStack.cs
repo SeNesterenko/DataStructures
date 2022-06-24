@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
-    public class Stack <T> where  T : IComparable<T>
+    public class CustomStack <T> : IEnumerable
+        where  T : IComparable<T>
     {
         private CustomLinkedList<T> _elements; // Uses a CustomLinkedList for the Heap
         public int Count { get; private set; } // Count of elements in a Heap
 
-        public Stack()
+        public CustomStack()
         {
             _elements = new CustomLinkedList<T>();
             Count = 0;
@@ -51,6 +53,11 @@ namespace DataStructures
         public void PrintAll() // Prints all elements
         {
             _elements.PrintAllReverse();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _elements.GetEnumerator(true);
         }
     }
 }

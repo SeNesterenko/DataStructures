@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
-    public class CircularBuffer <T> where T : IComparable<T>
+    public class CircularBuffer <T> : IEnumerable
+        where T : IComparable<T>
     {
         public int Count => _elements.Length; // Count of elements in the array
 
@@ -25,6 +27,35 @@ namespace DataStructures
             // If an index smaller than its Lenght, we simply return an element by the user's index, otherwise calculates
             // the element by the formula
             return _index < _elements.Length ? _elements[index] : _elements[(index + _index) % _elements.Length];
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return new CircularBufferEnumerator(this);
+        }
+
+        private class CircularBufferEnumerator : IEnumerator
+        {
+            private readonly CircularBuffer<T> _circularBuffer;
+            private int _index;
+
+            public CircularBufferEnumerator(CircularBuffer<T> circularBuffer)
+            {
+                _circularBuffer = circularBuffer;
+                _index = -1;
+            }
+            public bool MoveNext()
+            {
+                _index++;
+                return _circularBuffer.Count > _index;
+            }
+
+            public void Reset()
+            {
+                _index = -1;
+            }
+
+            public object Current => _circularBuffer.Get(_index);
         }
     }
 }

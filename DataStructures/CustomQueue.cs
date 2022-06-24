@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
-    public class CustomQueue <T> where T : IComparable<T>
+    public class CustomQueue <T> : IEnumerable
+        where T : IComparable<T>
     {
         private CustomLinkedList<T> _elements; // Uses a CustomLinkedList for a Queue
 
@@ -51,6 +53,11 @@ namespace DataStructures
                 Console.WriteLine(currentElement.Value);
                 currentElement = currentElement.Next;
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+           return _elements.GetEnumerator();
         }
     }
 }
