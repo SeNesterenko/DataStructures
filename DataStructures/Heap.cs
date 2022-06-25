@@ -1,17 +1,18 @@
 using System;
+using System.Collections;
 
 namespace DataStructures
 {
-    public class Heap <T> where T : IComparable<T>
+    public class Heap <T> : IEnumerable
+     where T : IComparable<T>
     {
         public int Count => _heap.Count; // Count of elements in a Heap
 
         private DynamicArray<T?> _heap; // Uses a DynamicArray for the Heap
 
-        public Heap()
-        {
-            _heap = new DynamicArray<T?>();
-        }
+        public T this[int index] => _heap[index]; // Indexer
+
+        public Heap() => _heap = new DynamicArray<T?>();
 
         public void Add (T? element) // Adds a new element to the Heap
         { 
@@ -68,6 +69,37 @@ namespace DataStructures
             
             _heap.Swap(index, maxChildIndex); // Otherwise it swaps
             ShiftDown(maxChildIndex); // Checks a child of the first element and sorts
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return new HeapEnumerator(this);
+        }
+
+        private class HeapEnumerator : IEnumerator
+        {
+
+            private Heap<T> _heap;
+            private int _index;
+            public HeapEnumerator(Heap<T> heap)
+            {
+                _heap = heap;
+                _index = -1;
+            }
+
+            public bool MoveNext()
+            {
+                _index++;
+
+                return _heap.Count > _index;
+            }
+
+            public void Reset()
+            {
+                _index = -1;
+            }
+
+            public object Current => _heap.Get(_index);
         }
     }
 }

@@ -11,10 +11,9 @@ namespace DataStructures
         private T[] _elements; // Array
         private int _index; // Index of a new element
 
-        public CircularBuffer(int count)
-        {
-            _elements = new T[count]; // Creates a new array based on the number from the user
-        }
+        public T this[int index] => _elements[index]; // Indexer
+
+        public CircularBuffer(int count) => _elements = new T[count]; // Creates a new array based on the number from the user
 
         public void Add(T element) // Adds a new element to the array
         {

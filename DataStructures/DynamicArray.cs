@@ -11,6 +11,8 @@ public class DynamicArray <T> : IEnumerable
         private int _capacity; // The total volume that the array contains
         private T[] _elements; // Array of elements which capacity increases when Count = _capacity 
 
+        public T this[int index] => _elements[index]; // Indexer
+
         public DynamicArray()
         {
             _capacity = 4; // Default capacity
