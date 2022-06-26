@@ -179,7 +179,7 @@ public class DynamicArray <T> : IEnumerable
                 _index = -1;
             }
 
-            public object Current => _dynamicArray.Get(_index);
+            public object Current => _dynamicArray[_index];
         }
     }
 }
